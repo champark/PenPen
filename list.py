@@ -23,6 +23,7 @@ ANIMATION = [0, 1, 0, 2]
 
 idx = 0
 tmr = 0
+stage = 1
 score = 0
 candy = 0
 
@@ -35,23 +36,63 @@ red_x = 0
 red_y = 0
 red_d = 0
 red_a = 0
+red_sx = 0
+red_sy = 0
 
-map_data = []
+map_data = []       # 미로용 리스트
 
 def set_stage():    # 스테이지 데이터 생성
     global map_data, candy
-    map_data = [
-        [0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0],
-        [0, 2, 3, 3, 2, 1, 1, 2, 3, 3, 2, 0],
-        [0, 3, 0, 0, 3, 3, 3, 3, 0, 0, 3, 0],
-        [0, 3, 1, 1, 3, 0, 0, 3, 1, 1, 3, 0],
-        [0, 3, 2, 2, 3, 0, 0, 3, 2, 2, 3, 0],
-        [0, 3, 0, 0, 3, 1, 1, 3, 0, 0, 3, 0],
-        [0, 3, 1, 1, 3, 3, 3, 3, 1, 1, 3, 0],
-        [0, 2, 3, 3, 2, 0, 0, 2, 3, 3, 2, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ]
-    candy = 32
+    global red_sx, red_sy
+
+    if stage == 1:
+        map_data = [
+            [0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0],
+            [0, 2, 3, 3, 2, 1, 1, 2, 3, 3, 2, 0],
+            [0, 3, 0, 0, 3, 3, 3, 3, 0, 0, 3, 0],
+            [0, 3, 1, 1, 3, 0, 0, 3, 1, 1, 3, 0],
+            [0, 3, 2, 2, 3, 0, 0, 3, 2, 2, 3, 0],
+            [0, 3, 0, 0, 3, 1, 1, 3, 0, 0, 3, 0],
+            [0, 3, 1, 1, 3, 3, 3, 3, 1, 1, 3, 0],
+            [0, 2, 3, 3, 2, 0, 0, 2, 3, 3, 2, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        candy = 32
+        red_sx = 630
+        red_sy = 450
+
+    if stage == 2:
+        map_data = [
+            [0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0],
+            [0, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 0],
+            [0, 3, 3, 0, 2, 1, 1, 2, 0, 3, 3, 0],
+            [0, 3, 3, 1, 3, 3, 3, 3, 1, 3, 3, 0],
+            [0, 2, 1, 3, 3, 3, 3, 3, 3, 1, 2, 0],
+            [0, 3, 3, 0, 3, 3, 3, 3, 0, 3, 3, 0],
+            [0, 3, 3, 1, 2, 1, 1, 2, 1, 3, 3, 0],
+            [0, 2, 2, 2, 3, 3, 3, 3, 2, 2, 2, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        candy = 38
+        red_sx = 630
+        red_sy = 90
+
+    if stage == 3:
+        map_data = [
+            [0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0],
+            [0, 2, 1, 3, 1, 2, 2, 3, 3, 3, 3, 0],
+            [0, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 0],
+            [0, 2, 1, 1, 1, 2, 2, 1, 1, 1, 1, 0],
+            [0, 2, 2, 2, 2, 3, 3, 2, 2, 2, 2, 0],
+            [0, 1, 1, 2, 0, 2, 2, 0, 1, 1, 2, 0],
+            [0, 3, 3, 3, 1, 1, 1, 0, 3, 3, 3, 0],
+            [0, 3, 3, 3, 2, 2, 2, 0, 3, 3, 3, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        candy = 23
+        red_sx = 630
+        red_sy = 450
+
 
 def set_chara_pos():        # 캐릭터 시작 위치
     global pen_x, pen_y, pen_d, pen_a
@@ -60,8 +101,8 @@ def set_chara_pos():        # 캐릭터 시작 위치
     pen_y = 90
     pen_d = DIR_DOWN
     pen_a = 3
-    red_x = 630
-    red_y = 450
+    red_x = red_sx
+    red_y = red_sy
     red_d = DIR_DOWN
     red_a = 3
 
@@ -79,6 +120,7 @@ def draw_screen():
     canvas.create_image(pen_x, pen_y, image=img_pen[pen_a], tag="SCREEN")
     canvas.create_image(red_x, red_y, image=img_red[red_a], tag="SCREEN")
     draw_txt("SCORE " + str(score), 200, 30, 30, "white")
+    draw_txt("STAGE " + str(stage), 520, 30, 30, "lime")
 
 # 각 방향에 벽 존재 여부
 def check_wall(cx, cy, di, dot):
@@ -178,7 +220,7 @@ def move_enemy():
 
 # 메인 루프
 def main():
-    global key, koff, idx, tmr, score
+    global key, koff, idx, tmr, stage,score
     tmr = tmr + 1
     draw_screen()
 
@@ -187,6 +229,7 @@ def main():
         if tmr % 10 < 5:
             draw_txt("Press SPACE !", 360, 380, 30, "yellow")
         if key == "space":
+            stage = 1
             score = 0
             set_stage()
             set_chara_pos()
@@ -205,9 +248,18 @@ def main():
             idx = 0
 
     if idx == 4:        # 스테이지 클리어
-        draw_txt("STAGE CLEAR", 360, 270, 40, "pink")
-        if tmr == 50:
-            idx = 0
+        if stage < 3:
+            draw_txt("STAGE CLEAR", 360, 270, 40, "pink")
+        else:
+            draw_txt("ALL STAGE CLEAR", 360, 270, 40, "violet")
+        if tmr == 30:
+            if stage < 3:
+                stage = stage + 1
+                set_stage()
+                set_chara_pos()
+                idx = 1
+            else:
+                idx = 0
 
 # mac 조작 코드
 #    if koff == True:
